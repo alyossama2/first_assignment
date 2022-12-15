@@ -1,9 +1,11 @@
 <?php
+
 /**
- * @category    Example
- * @package     Example_Migration
- * @author      Ralfs Aizsils <info@scandiweb.com>
- * @copyright   Copyright (c) 2021 Scandiweb, Ltd (https://scandiweb.com)
+ * @category    Scandiweb
+ * @package     Sacndiweb\Test
+ * @author      Aly Ossama <aly.ossama@scandiweb.com>
+ * @copyright   Copyright (c) 2022 Scandiweb, Ltd (https://scandiweb.com)
+ * @license     http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
  */
 
 namespace Scandiweb\Test\Setup\Patch\Data;
@@ -69,21 +71,25 @@ class CreateSimpleProduct implements DataPatchInterface
     protected EavSetup $eavSetup;
 
     /**
+     * @var CategoryLinkManagementInterface
+     */
+    protected CategoryLinkManagementInterface $categoryLink;
+
+    /**
      * @var array
      */
     protected array $sourceItems = [];
 
     /**
      * Migration patch constructor.
-     *
-     * @param ProductInterfaceFactory $productInterfaceFactory
-     * @param ProductRepositoryInterface $productRepository
-     * @param SourceItemInterfaceFactory $sourceItemFactory
-     * @param SourceItemsSaveInterface $sourceItemsSaveInterface
-     * @param State $appState
-     * @param StoreManagerInterface $storeManager
-		 * @param EavSetup $eavSetup
-     * @param CategoryLinkManagementInterface $categoryLink
+     * @param   ProductInterfaceFactory          $productInterfaceFactory
+     * @param   ProductRepositoryInterface       $productRepository
+     * @param   SourceItemInterfaceFactory       $sourceItemFactory
+     * @param   SourceItemsSaveInterface         $sourceItemsSaveInterface
+     * @param   State                            $appState
+     * @param   StoreManagerInterface            $storeManager
+     * @param   EavSetup                         $eavSetup
+     * @param   CategoryLinkManagementInterface  $categoryLink
      */
     public function __construct(
         ProductInterfaceFactory $productInterfaceFactory,
@@ -91,18 +97,18 @@ class CreateSimpleProduct implements DataPatchInterface
         State $appState,
         StoreManagerInterface $storeManager,
         EavSetup $eavSetup,
-				SourceItemInterfaceFactory $sourceItemFactory,
+        SourceItemInterfaceFactory $sourceItemFactory,
         SourceItemsSaveInterface $sourceItemsSaveInterface,
-				CategoryLinkManagementInterface $categoryLink
+        CategoryLinkManagementInterface $categoryLink
     ) {
-        $this->appState = $appState;
-        $this->productInterfaceFactory = $productInterfaceFactory;
-        $this->productRepository = $productRepository;
-				$this->eavSetup = $eavSetup;
-        $this->storeManager = $storeManager;
-        $this->sourceItemFactory = $sourceItemFactory;
+        $this->appState                 = $appState;
+        $this->productInterfaceFactory  = $productInterfaceFactory;
+        $this->productRepository        = $productRepository;
+        $this->eavSetup                 = $eavSetup;
+        $this->storeManager             = $storeManager;
+        $this->sourceItemFactory        = $sourceItemFactory;
         $this->sourceItemsSaveInterface = $sourceItemsSaveInterface;
-				$this->categoryLink = $categoryLink;
+        $this->categoryLink             = $categoryLink;
     }
 
     /**
@@ -129,12 +135,12 @@ class CreateSimpleProduct implements DataPatchInterface
         }
 
         $attributeSetId = $this->eavSetup->getAttributeSetId(Product::ENTITY, 'Default');
-        $websiteIDs = [$this->storeManager->getStore()->getWebsiteId()];
-				$product->setTypeId(Type::TYPE_SIMPLE)
+        $websiteIDs     = [$this->storeManager->getStore()->getWebsiteId()];
+        $product->setTypeId(Type::TYPE_SIMPLE)
             ->setWebsiteIds($websiteIDs)
             ->setAttributeSetId($attributeSetId)
             ->setName('Grip Trainer')
-						->setUrlKey('griptrainer')
+            ->setUrlKey('griptrainer')
             ->setSku('grip-trainer')
             ->setPrice(9.99)
             ->setVisibility(Visibility::VISIBILITY_BOTH)
@@ -151,7 +157,7 @@ class CreateSimpleProduct implements DataPatchInterface
 
         $this->sourceItemsSaveInterface->execute($this->sourceItems);
 
-				$this->categoryLink->assignProductToCategories($product->getSku(), [2]);
+        $this->categoryLink->assignProductToCategories($product->getSku(), [2]);
     }
 
     /**
